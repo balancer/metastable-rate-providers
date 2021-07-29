@@ -25,6 +25,7 @@ contract CTokenRateProvider is IRateProvider {
     ICToken public immutable cToken;
 
     constructor(ICToken _cToken) {
+        require(_cToken.isCToken(), "Provided address is not cToken");
         cToken = _cToken;
     }
 
