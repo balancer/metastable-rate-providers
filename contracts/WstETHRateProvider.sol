@@ -21,7 +21,7 @@ import "./interfaces/IwstETH.sol";
  * @title Wrapped stETH Rate Provider
  * @notice Returns the value of wstETH in terms of stETH
  */
-contract WsETHRateProvider is IRateProvider {
+contract WstETHRateProvider is IRateProvider {
     IwstETH public immutable wstETH;
 
     constructor(IwstETH _wstETH) {
