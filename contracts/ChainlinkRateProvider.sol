@@ -12,10 +12,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-pragma solidity ^0.7.0;
+pragma solidity ^0.8.0;
 
-import "@chainlink/contracts/src/v0.7/interfaces/FeedRegistryInterface.sol";
-import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/FeedRegistryInterface.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 import "./interfaces/IRateProvider.sol";
 
