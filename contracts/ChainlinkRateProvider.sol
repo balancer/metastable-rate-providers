@@ -14,6 +14,7 @@
 
 pragma solidity ^0.8.0;
 
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/FeedRegistryInterface.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
@@ -22,11 +23,21 @@ import "./interfaces/IRateProvider.sol";
 /**
  * @title Chainlink Rate Provider
  * @notice Returns a Chainlink price feed's quote for the provided currency pair
+ * @dev This rate provider uses the Chainlink pricefeed registry as the source of truth
+ *      while caching the underlying feed to query in order to save gas.
  */
 contract ChainlinkRateProvider is IRateProvider {
     FeedRegistryInterface public immutable registry;
     address public immutable base;
     address public immutable quote;
+
+    // We cache the price feed for the given currency pair on this contract
+    // This avoids unnecessarily querying the Chainlink registry.
+    AggregatorV3Interface internal _feed;
+
+    // Metastable pools expect a response of a fixed-point value with 18 decimals
+    // We then need to scale the price feed's output to match this.
+    uint256 internal _scalingFactor;
 
     /**
      * @param _registry - The Chainlink price feed registry contract
@@ -41,19 +52,31 @@ contract ChainlinkRateProvider is IRateProvider {
         registry = _registry;
         base = _base;
         quote = _quote;
+        
+        // Initialise price feed cache
+        _feed = _registry.getFeed(_base, _quote);
+        _scalingFactor = 10 ** SafeMath.sub(18, _feed.decimals());
     }
 
     /**
      * @return the value of the quote currency in terms of the base currency
      */
     function getRate() external view override returns (uint256) {
-        (, int256 price, , , ) = registry.latestRoundData(base, quote);
+        (, int256 price, , , ) = _feed.latestRoundData();
         require(price > 0, "Invalid price rate response");
-         
-        // Metastable pools expect a response of a fixed-point value with 18 decimals
-        // We then need to scale the price feed's output to match this.
+        return uint256(price) * _scalingFactor;
+    }
+
+    /**
+     * @notice updates cached address of Chainlink price feed used to source quotes
+     * @dev The cache may fall out of sync with the canonical price feed as listed on the Chainlink registry
+     *      Any address may call this function to update the cache to match the registry.
+     */
+    function updateCachedFeed() external {
+        AggregatorV3Interface priceFeed = registry.getFeed(base, quote);
+        
         // Price feeds with more than 18 decimals are not supported.
-        uint256 scalingFactor = 10 ** SafeMath.sub(18, registry.decimals(base, quote));
-        return uint256(price) * scalingFactor;
+        _scalingFactor = 10 ** SafeMath.sub(18, priceFeed.decimals());
+        _feed = priceFeed;
     }
 }
