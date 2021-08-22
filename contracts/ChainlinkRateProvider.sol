@@ -52,10 +52,10 @@ contract ChainlinkRateProvider is IRateProvider {
         registry = _registry;
         base = _base;
         quote = _quote;
-        
+
         // Initialise price feed cache
         _feed = _registry.getFeed(_base, _quote);
-        _scalingFactor = 10 ** SafeMath.sub(18, _feed.decimals());
+        _scalingFactor = 10**SafeMath.sub(18, _feed.decimals());
     }
 
     /**
@@ -74,9 +74,9 @@ contract ChainlinkRateProvider is IRateProvider {
      */
     function updateCachedFeed() external {
         AggregatorV3Interface priceFeed = registry.getFeed(base, quote);
-        
+
         // Price feeds with more than 18 decimals are not supported.
-        _scalingFactor = 10 ** SafeMath.sub(18, priceFeed.decimals());
+        _scalingFactor = 10**SafeMath.sub(18, priceFeed.decimals());
         _feed = priceFeed;
     }
 }
