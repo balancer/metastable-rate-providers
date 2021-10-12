@@ -15,5 +15,5 @@
 pragma solidity ^0.8.0;
 
 interface IStaticAToken {
-    function staticToDynamicAmount(uint256 amount) external view returns (uint256);
+    function rate() external view returns (uint256);
 }

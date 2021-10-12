@@ -32,6 +32,6 @@ contract StaticATokenRateProvider is IRateProvider {
      * @return the value of wstETH in terms of stETH
      */
     function getRate() external view override returns (uint256) {
-        return waToken.staticToDynamicAmount(1 ether);
+        return waToken.rate() / 10**9;
     }
 }
