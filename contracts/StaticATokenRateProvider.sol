@@ -29,9 +29,11 @@ contract StaticATokenRateProvider is IRateProvider {
     }
 
     /**
-     * @return the value of wstETH in terms of stETH
+     * @return The value of the wrapped aToken in terms of the underlying aToken
      */
     function getRate() external view override returns (uint256) {
+        // getRate returns a 18 decimal fixed point number, but `rate` has 27 decimals (i.e. a 'ray' value)
+        // so we need to convert it.
         return waToken.rate() / 10**9;
     }
 }
