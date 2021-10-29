@@ -23,60 +23,30 @@ import "./interfaces/IRateProvider.sol";
 /**
  * @title Chainlink Rate Provider
  * @notice Returns a Chainlink price feed's quote for the provided currency pair
- * @dev This rate provider uses the Chainlink pricefeed registry as the source of truth
- *      while caching the underlying feed to query in order to save gas.
+ * @dev This rate provider is a simplification of ChainlinkReistryRateProvider which is fixed to a particular pricefeed.
+ *      This is expected to be used in environments where the Chainlink registry is not available.
  */
 contract ChainlinkRateProvider is IRateProvider {
-    FeedRegistryInterface public immutable registry;
-    address public immutable base;
-    address public immutable quote;
+    AggregatorV3Interface public immutable pricefeed;
 
-    // We cache the price feed for the given currency pair on this contract
-    // This avoids unnecessarily querying the Chainlink registry.
-    AggregatorV3Interface internal _feed;
-
-    // Metastable pools expect a response of a fixed-point value with 18 decimals
+    // Rate providers are expected to respond with a fixed-point value with 18 decimals
     // We then need to scale the price feed's output to match this.
-    uint256 internal _scalingFactor;
+    uint256 internal immutable _scalingFactor;
 
     /**
-     * @param _registry - The Chainlink price feed registry contract
-     * @param _base - The identifier for the currency which the quoted rate will be denominated in
-     * @param _quote - The identifier for the currency for which a price will be quoted
+     * @param feed - The Chainlink price feed contract
      */
-    constructor(
-        FeedRegistryInterface _registry,
-        address _base,
-        address _quote
-    ) {
-        registry = _registry;
-        base = _base;
-        quote = _quote;
-
-        // Initialise price feed cache
-        _feed = _registry.getFeed(_base, _quote);
-        _scalingFactor = 10**SafeMath.sub(18, _feed.decimals());
+    constructor(AggregatorV3Interface feed) {
+        pricefeed = feed;
+        _scalingFactor = 10**SafeMath.sub(18, feed.decimals());
     }
 
     /**
      * @return the value of the quote currency in terms of the base currency
      */
     function getRate() external view override returns (uint256) {
-        (, int256 price, , , ) = _feed.latestRoundData();
+        (, int256 price, , , ) = pricefeed.latestRoundData();
         require(price > 0, "Invalid price rate response");
         return uint256(price) * _scalingFactor;
-    }
-
-    /**
-     * @notice updates cached address of Chainlink price feed used to source quotes
-     * @dev The cache may fall out of sync with the canonical price feed as listed on the Chainlink registry
-     *      Any address may call this function to update the cache to match the registry.
-     */
-    function updateCachedFeed() external {
-        AggregatorV3Interface priceFeed = registry.getFeed(base, quote);
-
-        // Price feeds with more than 18 decimals are not supported.
-        _scalingFactor = 10**SafeMath.sub(18, priceFeed.decimals());
-        _feed = priceFeed;
     }
 }
