@@ -14,21 +14,9 @@
 
 pragma solidity ^0.8.0;
 
-import "./ILendingPool.sol";
-
-interface IStaticAToken {
-    /**
-     * @dev returns the address of the staticAToken's underlying asset
-     */
-    function ASSET() external view returns (address);
-
-    /**
-     * @dev returns the address of the staticAToken's lending pool
-     */
-    function LENDING_POOL() external view returns (ILendingPool);
-
+interface ILendingPool {
     /**
      * @dev returns a 27 decimal fixed point 'ray' value so a rate of 1 is represented as 1e27
      */
-    function rate() external view returns (uint256);
+    function getReserveNormalizedIncome(address asset) external view returns (uint256);
 }
