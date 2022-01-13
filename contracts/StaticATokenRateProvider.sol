@@ -22,18 +22,26 @@ import "./interfaces/IStaticAToken.sol";
  * @notice Returns the value of a wrapped (static) aToken in terms of the underlying (dynamic) aToken
  */
 contract StaticATokenRateProvider is IRateProvider {
-    IStaticAToken public immutable waToken;
+    ILendingPool public immutable lendingPool;
+    address public immutable asset;
 
     constructor(IStaticAToken _waToken) {
-        waToken = _waToken;
+        lendingPool = _waToken.LENDING_POOL();
+        asset = _waToken.ASSET();
     }
 
     /**
      * @return The value of the wrapped aToken in terms of the underlying aToken
      */
     function getRate() external view override returns (uint256) {
+        // This pulls the implementation of used in the StaticAToken contract
+        // except avoiding storing relevant variables in storage for gas reasons.
+        // solhint-disable-next-line max-line-length
+        // see: https://github.com/aave/protocol-v2/blob/ac58fea62bb8afee23f66197e8bce6d79ecda292/contracts/protocol/tokenization/StaticATokenLM.sol#L255-L257
+        uint256 rate = lendingPool.getReserveNormalizedIncome(asset);
+
         // getRate returns a 18 decimal fixed point number, but `rate` has 27 decimals (i.e. a 'ray' value)
         // so we need to convert it.
-        return waToken.rate() / 10**9;
+        return rate / 10**9;
     }
 }
