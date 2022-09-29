@@ -7,11 +7,10 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/dist/src/signer-wit
 describe('Coinbase Eth rate provider', function() {
     let mockCBEth: Contract;
     let cBEthRateProvider: Contract;
-    let signer: SignerWithAddress;
     let tempAddress;
 
     before('setup eoas', async () => {
-        [signer, ] = await ethers.getSigners();
+        console.log('Starting test from block:', await ethers.provider.getBlockNumber())
     })
 
     beforeEach('deploy mock & rate provider', async () =>{

@@ -5,21 +5,20 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/dist/src/signer-wit
 
 
 
-describe('Coinbase Eth rate provider', function() {
+describe('Coinbase Eth rate provider - mainnet fork', function() {
     let cBEthRateProvider: Contract;
-    let signer: SignerWithAddress;
-    let cbEthAddres = '0xBe9895146f7AF43049ca1c1AE358B0541Ea49704'; //mainnet
+    let cbEthAddress = '0xBe9895146f7AF43049ca1c1AE358B0541Ea49704'; //mainnet
 
     before('setup eoas', async () => {
-        [signer, ] = await ethers.getSigners();
+        console.log('Starting test from block:', await ethers.provider.getBlockNumber())
     })
 
     beforeEach('deploy rate provider', async () =>{
         const CBEthRateProvider = await ethers.getContractFactory('CbEthRateProvider');
-        cBEthRateProvider = await CBEthRateProvider.deploy(cbEthAddres);
+        cBEthRateProvider = await CBEthRateProvider.deploy(cbEthAddress);
     })
     it('checks if proxy = asset in rate provider',async () => {
-        expect(await cBEthRateProvider.cbETH()).to.equal(cbEthAddres)
+        expect(await cBEthRateProvider.cbETH()).to.equal(cbEthAddress)
     })
     it('greater than 18 decimals scale - scaled',async () => {
         let currentRate = await cBEthRateProvider.getRate();
