@@ -5,6 +5,7 @@ yarn-error.log*
 # IDE
 .vscode/
 
+
 # Dependency directories
 node_modules/
 
@@ -26,3 +27,11 @@ dist/
 
 # typechain artifacts
 typechain/
+
+# scripts
+scripts
+
+# Mac
+.DS_Store
+contracts/.DS_Store
+
