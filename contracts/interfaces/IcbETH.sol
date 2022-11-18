@@ -2,12 +2,8 @@
 
 pragma solidity ^0.8.4;
 
-
-
 /**
  * @title Coinbase Staked ETH interface to return exchangeRate
- * @dev 
- *
  */
 interface IcbETH {
     /**
