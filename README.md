@@ -28,3 +28,7 @@ Most of the Solidity source code is licensed under the GNU General Public Licens
 
 cbETH is Coinbase Wrapped Staked Ether. The verified contract can be found [here](https://etherscan.io/address/0xBe9895146f7AF43049ca1c1AE358B0541Ea49704#readProxyContract%23F12) The exchange rate can be pulled from the smart contract. cbETH is built on Coinbase's [wrapping token contract](https://github.com/coinbase/wrapped-tokens-os). Coinbase controls the oracle's address and will update the exchangeRate every 24 hours at 4pm UTC. This update cadence may change in the future. It was audited by [OpenZeppelin](https://blog.openzeppelin.com/coinbase-liquid-staking-token-audit/).
 
+## on Coinbase staked Ether rate provider
+
+A verified version of this rateProvider is avilable on goerli on `0xdF36De97c05fD5114E26212cfBD67d368AE03374`
+
