@@ -26,3 +26,13 @@ dist/
 
 # typechain artifacts
 typechain/
+
+# Mac
+.DS_Store
+contracts/.DS_Store
+
+# tests
+test/
+
+# scripts
+scripts/
