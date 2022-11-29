@@ -2,9 +2,9 @@ import { ethers } from 'hardhat';
 import { expect } from 'chai';
 import { Contract } from 'ethers';
 
-describe('Coinbase Eth rate provider', function () {
-  let mockCBEth: Contract;
-  let cBEthRateProvider: Contract;
+describe('StakedTokenV1RateProvider', function () {
+  let mockStakedTokenV1: Contract;
+  let stakedTokenV1RateProvider: Contract;
   let tempAddress;
 
   before('setup eoas', async () => {
@@ -12,25 +12,25 @@ describe('Coinbase Eth rate provider', function () {
   });
 
   beforeEach('deploy mock & rate provider', async () => {
-    const MockCBEth = await ethers.getContractFactory('MockCBEth');
-    mockCBEth = await MockCBEth.deploy();
-    tempAddress = mockCBEth.address;
-    const CBEthRateProvider = await ethers.getContractFactory('CbEthRateProvider');
-    cBEthRateProvider = await CBEthRateProvider.deploy(tempAddress);
+    const MockStakedTokenV1 = await ethers.getContractFactory('MockStakedTokenV1');
+    mockStakedTokenV1 = await MockStakedTokenV1.deploy();
+    tempAddress = mockStakedTokenV1.address;
+    const StakedTokenV1RateProvider = await ethers.getContractFactory('StakedTokenV1RateProvider');
+    stakedTokenV1RateProvider = await StakedTokenV1RateProvider.deploy(tempAddress);
   });
 
   it('returns rate scaled correctly', async () => {
-    expect(await mockCBEth.exchangeRate()).to.equal(ethers.utils.parseUnits('1', 18));
+    expect(await mockStakedTokenV1.exchangeRate()).to.equal(ethers.utils.parseUnits('1', 18));
   });
   it('can set rate', async () => {
-    await mockCBEth.setExchangeRate(2);
-    expect(await mockCBEth.exchangeRate()).to.equal(ethers.utils.parseUnits('2', 18));
+    await mockStakedTokenV1.setExchangeRate(2);
+    expect(await mockStakedTokenV1.exchangeRate()).to.equal(ethers.utils.parseUnits('2', 18));
   });
   it('gets rate from rateProvider', async () => {
-    expect(await cBEthRateProvider.getRate()).to.equal(ethers.utils.parseUnits('1', 18));
+    expect(await stakedTokenV1RateProvider.getRate()).to.equal(ethers.utils.parseUnits('1', 18));
   });
   it('gets correct rate from rateProvider after underlying rate update', async () => {
-    await mockCBEth.setExchangeRate(2);
-    expect(await cBEthRateProvider.getRate()).to.equal(ethers.utils.parseUnits('2', 18));
+    await mockStakedTokenV1.setExchangeRate(2);
+    expect(await stakedTokenV1RateProvider.getRate()).to.equal(ethers.utils.parseUnits('2', 18));
   });
 });
