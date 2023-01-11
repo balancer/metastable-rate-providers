@@ -13,7 +13,7 @@ import "./interfaces/IRateProvider.sol";
  * `exchangeRate` parameter to improve composability. StakedTokenV1 is built on Coinbase's StakedTokenV1.
  * https://github.com/coinbase/wrapped-tokens-os/blob/main/contracts/wrapped-tokens/staking/StakedTokenV1.sol.
  * Coinbase controls the oracle's address and updates exchangeRate
- * every 24 hours at 4pm UTC. This update cadende may change
+ * every 24 hours at 4pm UTC. This update cadence may change
  * in the future.
  */
 contract StakedTokenV1RateProvider is IRateProvider {
