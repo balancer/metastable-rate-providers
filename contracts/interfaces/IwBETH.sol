@@ -15,7 +15,7 @@
 pragma solidity ^0.8.0;
 
 /**
- * @title wBETH token wrapper with static balances.
+ * @title Token wrapper for Binance ETH staking deposits.
  */
 interface IwBETH {
     /**
