@@ -18,8 +18,8 @@ import "./interfaces/IRateProvider.sol";
 import "./interfaces/IwBETH.sol";
 
 /**
- * @title Wrapped BETH Rate Provider
- * @notice Returns the value of wBETH in terms of BETH
+ * @title Wrapped Binance Beacon ETH Rate Provider
+ * @notice Returns the value of wBETH in terms of ETH
  */
 contract BinanceBeaconEthRateProvider is IRateProvider {
     IwBETH public immutable wBETH;
