@@ -29,7 +29,7 @@ contract BinanceBeaconEthRateProvider is IRateProvider {
     }
 
     /**
-     * @return the value of wBETH in terms of BETH
+     * @return the value of wBETH in terms of ETH
      */
     function getRate() external view override returns (uint256) {
         return wBETH.exchangeRate();
