@@ -19,8 +19,8 @@ pragma solidity ^0.8.0;
  */
 interface IwBETH {
     /**
-     * @notice Get amount of BETH for 1 wBETH
-     * @return Amount of BETH for 1 wBETH
+     * @notice Get amount of ETH for 1 wBETH
+     * @return Amount of ETH for 1 wBETH
      */
     function exchangeRate() external view returns (uint256);
 }
