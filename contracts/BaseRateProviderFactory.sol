@@ -23,16 +23,16 @@ import "./interfaces/IBaseRateProviderFactory.sol";
  */
 contract BaseRateProviderFactory is IBaseRateProviderFactory {
     // Mapping of rate providers created by this factory.
-    mapping(address => bool) private _factoryCreatedRateProviders;
+    mapping(address => bool) private _isRateProviderFromFactory;
 
     event RateProviderCreated(address indexed rateProvider);
 
     function isRateProviderFromFactory(address rateProvider) external view returns (bool) {
-        return _factoryCreatedRateProviders[rateProvider];
+        return _isRateProviderFromFactory[rateProvider];
     }
 
     function _onCreate(address rateProvider) internal {
-        _factoryCreatedRateProviders[rateProvider] = true;
+        _isRateProviderFromFactory[rateProvider] = true;
         emit RateProviderCreated(rateProvider);
     }
 }
