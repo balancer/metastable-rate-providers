@@ -17,15 +17,13 @@ pragma solidity ^0.8.0;
 import "./interfaces/IBaseRateProviderFactory.sol";
 
 /**
- * @title Chainlink Rate Provider Factory
- * @notice Factory for creating ChainlinkRateProviders
- * @dev This contract is used to create ChainlinkRateProvider contracts.
- *      RateProviders created by this factory are to be used in environments
- *      where the Chainlink registry is not available.
+ * @title Base Rate Provider Factory
+ * @notice Base Factory for creating RateProviders
+ * @dev This is a base contract for building factories that create RateProviders.
  */
 contract BaseRateProviderFactory is IBaseRateProviderFactory {
     // Mapping of rate providers created by this factory.
-    mapping(address => bool) internal _factoryCreatedRateProviders;
+    mapping(address => bool) private _factoryCreatedRateProviders;
 
     event RateProviderCreated(address indexed rateProvider);
 
