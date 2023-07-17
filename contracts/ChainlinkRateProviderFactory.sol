@@ -27,10 +27,6 @@ import "./ChainlinkRateProvider.sol";
  *      where the Chainlink registry is not available.
  */
 contract ChainlinkRateProviderFactory is BaseRateProviderFactory {
-    constructor() BaseRateProviderFactory() {
-        // solhint-disable-previous-line no-empty-blocks
-    }
-
     /**
      * @notice Deploys a new ChainlinkRateProvider contract using a price feed.
      * @param feed - The Chainlink price feed contract.
