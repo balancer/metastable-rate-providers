@@ -18,20 +18,38 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 import "./ChainlinkRateProvider.sol";
 
+/**
+ * @title Chainlink Rate Provider Factory
+ * @notice Factory for creating ChainlinkRateProviders
+ * @dev This contract is used to create ChainlinkRateProvider contracts.
+ *      RateProviders created by this factory are to be used in environments 
+ *      where the Chainlink registry is not available.
+ */
+
 contract ChainlinkRateProviderFactory {
+    // Mapping of rate providers created by this factory.
     mapping (address => bool) private _factoryCreatedRateProviders;
 
     event ChainlinkRateProviderCreated(address indexed provider);
 
+    /**
+     * @notice Deploys a new ChainlinkRateProvider contract using a price feed.
+     * @param feed - The Chainlink price feed contract.
+     */
     function create(AggregatorV3Interface feed) external returns (ChainlinkRateProvider) {
         ChainlinkRateProvider provider = new ChainlinkRateProvider(feed);
         _factoryCreatedRateProviders[address(provider)] = true;
-        
+
         emit ChainlinkRateProviderCreated(address(provider));
         
         return provider;
     }
 
+    /**
+     * @notice Checks if a rate provider was created by this factory.
+     * @param provider - Address of the rate provider to check.
+     * @return bool - True if the rate provider was created by this factory.
+     */
     function isRateProviderFromFactory(address provider) external view returns (bool) {
         return _factoryCreatedRateProviders[provider];
     }
