@@ -14,10 +14,7 @@
 
 pragma solidity ^0.8.0;
 
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
-
-import "./BaseRateProviderFactory.sol";
-import "./ChainlinkRateProvider.sol";
+import "./interfaces/IBaseRateProviderFactory.sol";
 
 /**
  * @title Chainlink Rate Provider Factory
@@ -26,23 +23,35 @@ import "./ChainlinkRateProvider.sol";
  *      RateProviders created by this factory are to be used in environments
  *      where the Chainlink registry is not available.
  */
-contract ChainlinkRateProviderFactory is BaseRateProviderFactory {
-    constructor(address authorizer) BaseRateProviderFactory(authorizer) {
+contract BaseRateProviderFactory is IBaseRateProviderFactory {
+    // Mapping of rate providers created by this factory.
+    mapping(address => bool) internal _factoryCreatedRateProviders;
+    bool private _disabled;
+
+    event RateProviderCreated(address indexed rateProvider);
+    event FactoryDisabled();
+
+    constructor(address authorizer) {
         // solhint-disable-previous-line no-empty-blocks
     }
 
-    /**
-     * @notice Deploys a new ChainlinkRateProvider contract using a price feed.
-     * @param feed - The Chainlink price feed contract.
-     */
-    function create(AggregatorV3Interface feed) external returns (ChainlinkRateProvider) {
+    function isRateProviderFromFactory(address rateProvider) external view returns (bool) {
+        return _factoryCreatedRateProviders[rateProvider];
+    }
+
+    function isDisabled() public view override returns (bool) {
+        return _disabled;
+    }
+
+    function disable() external override {
         _ensureEnabled();
 
-        ChainlinkRateProvider rateProvider = new ChainlinkRateProvider(feed);
-        _factoryCreatedRateProviders[address(rateProvider)] = true;
+        _disabled = true;
 
-        emit RateProviderCreated(address(rateProvider));
+        emit FactoryDisabled();
+    }
 
-        return rateProvider;
+    function _ensureEnabled() internal view {
+        require(!isDisabled(), "Factory disabled");
     }
 }
