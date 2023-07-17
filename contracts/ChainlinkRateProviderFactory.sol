@@ -30,27 +30,27 @@ contract ChainlinkRateProviderFactory {
     // Mapping of rate providers created by this factory.
     mapping (address => bool) private _factoryCreatedRateProviders;
 
-    event ChainlinkRateProviderCreated(address indexed provider);
+    event ChainlinkRateProviderCreated(address indexed rateProvider);
 
     /**
      * @notice Deploys a new ChainlinkRateProvider contract using a price feed.
      * @param feed - The Chainlink price feed contract.
      */
     function create(AggregatorV3Interface feed) external returns (ChainlinkRateProvider) {
-        ChainlinkRateProvider provider = new ChainlinkRateProvider(feed);
-        _factoryCreatedRateProviders[address(provider)] = true;
+        ChainlinkRateProvider rateProvider = new ChainlinkRateProvider(feed);
+        _factoryCreatedRateProviders[address(rateProvider)] = true;
 
-        emit ChainlinkRateProviderCreated(address(provider));
+        emit ChainlinkRateProviderCreated(address(rateProvider));
         
-        return provider;
+        return rateProvider;
     }
 
     /**
      * @notice Checks if a rate provider was created by this factory.
-     * @param provider - Address of the rate provider to check.
+     * @param rateProvider - Address of the rate provider to check.
      * @return bool - True if the rate provider was created by this factory.
      */
-    function isRateProviderFromFactory(address provider) external view returns (bool) {
-        return _factoryCreatedRateProviders[provider];
+    function isRateProviderFromFactory(address rateProvider) external view returns (bool) {
+        return _factoryCreatedRateProviders[rateProvider];
     }
 }
