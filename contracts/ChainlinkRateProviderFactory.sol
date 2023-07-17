@@ -14,6 +14,25 @@
 
 pragma solidity ^0.8.0;
 
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+import "./ChainlinkRateProvider.sol";
+
 contract ChainlinkRateProviderFactory {
-    
+    mapping (address => bool) private _factoryCreatedRateProviders;
+
+    event ChainlinkRateProviderCreated(address indexed provider);
+
+    function create(AggregatorV3Interface feed) external returns (ChainlinkRateProvider) {
+        ChainlinkRateProvider provider = new ChainlinkRateProvider(feed);
+        _factoryCreatedRateProviders[address(provider)] = true;
+        
+        emit ChainlinkRateProviderCreated(address(provider));
+        
+        return provider;
+    }
+
+    function isRateProviderFromFactory(address provider) external view returns (bool) {
+        return _factoryCreatedRateProviders[provider];
+    }
 }
