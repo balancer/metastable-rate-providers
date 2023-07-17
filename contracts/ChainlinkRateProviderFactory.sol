@@ -27,7 +27,7 @@ import "./ChainlinkRateProvider.sol";
  *      where the Chainlink registry is not available.
  */
 contract ChainlinkRateProviderFactory is BaseRateProviderFactory {
-    constructor(address authorizer) BaseRateProviderFactory(authorizer) {
+    constructor() BaseRateProviderFactory() {
         // solhint-disable-previous-line no-empty-blocks
     }
 
@@ -36,8 +36,6 @@ contract ChainlinkRateProviderFactory is BaseRateProviderFactory {
      * @param feed - The Chainlink price feed contract.
      */
     function create(AggregatorV3Interface feed) external returns (ChainlinkRateProvider) {
-        _ensureEnabled();
-
         ChainlinkRateProvider rateProvider = new ChainlinkRateProvider(feed);
         _factoryCreatedRateProviders[address(rateProvider)] = true;
 

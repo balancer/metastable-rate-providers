@@ -26,33 +26,10 @@ import "./interfaces/IBaseRateProviderFactory.sol";
 contract BaseRateProviderFactory is IBaseRateProviderFactory {
     // Mapping of rate providers created by this factory.
     mapping(address => bool) internal _factoryCreatedRateProviders;
-    bool private _disabled;
 
     event RateProviderCreated(address indexed rateProvider);
-    event FactoryDisabled();
-
-    // TODO: Implement Authentication
-    constructor(address authorizer) {
-        // solhint-disable-previous-line no-empty-blocks
-    }
 
     function isRateProviderFromFactory(address rateProvider) external view returns (bool) {
         return _factoryCreatedRateProviders[rateProvider];
-    }
-
-    function isDisabled() public view override returns (bool) {
-        return _disabled;
-    }
-
-    function disable() external override {
-        _ensureEnabled();
-
-        _disabled = true;
-
-        emit FactoryDisabled();
-    }
-
-    function _ensureEnabled() internal view {
-        require(!isDisabled(), "Factory disabled");
     }
 }

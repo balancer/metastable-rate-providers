@@ -21,15 +21,4 @@ interface IBaseRateProviderFactory {
      * @return bool - True if the rate provider was created by the derived factory.
      */
     function isRateProviderFromFactory(address rateProvider) external view returns (bool);
-
-    /**
-     * @dev Check whether the derived factory has been disabled.
-     */
-    function isDisabled() external view returns (bool);
-
-    /**
-     * @dev Disable the factory, preventing the creation of more pools. Already existing pools are unaffected.
-     * Once a factory is disabled, it cannot be re-enabled.
-     */
-    function disable() external;
 }
