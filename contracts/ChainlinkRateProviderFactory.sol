@@ -33,9 +33,7 @@ contract ChainlinkRateProviderFactory is BaseRateProviderFactory {
      */
     function create(AggregatorV3Interface feed) external returns (ChainlinkRateProvider) {
         ChainlinkRateProvider rateProvider = new ChainlinkRateProvider(feed);
-        _factoryCreatedRateProviders[address(rateProvider)] = true;
-
-        emit RateProviderCreated(address(rateProvider));
+        _onCreate(address(rateProvider));
 
         return rateProvider;
     }

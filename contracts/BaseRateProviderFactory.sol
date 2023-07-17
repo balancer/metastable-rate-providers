@@ -32,4 +32,9 @@ contract BaseRateProviderFactory is IBaseRateProviderFactory {
     function isRateProviderFromFactory(address rateProvider) external view returns (bool) {
         return _factoryCreatedRateProviders[rateProvider];
     }
+
+    function _onCreate(address rateProvider) internal {
+        _factoryCreatedRateProviders[rateProvider] = true;
+        emit RateProviderCreated(rateProvider);
+    }
 }
