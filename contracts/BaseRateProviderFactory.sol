@@ -31,6 +31,7 @@ contract BaseRateProviderFactory is IBaseRateProviderFactory {
     event RateProviderCreated(address indexed rateProvider);
     event FactoryDisabled();
 
+    // TODO: Implement Authentication
     constructor(address authorizer) {
         // solhint-disable-previous-line no-empty-blocks
     }
