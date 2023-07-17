@@ -22,13 +22,13 @@ import "./ChainlinkRateProvider.sol";
  * @title Chainlink Rate Provider Factory
  * @notice Factory for creating ChainlinkRateProviders
  * @dev This contract is used to create ChainlinkRateProvider contracts.
- *      RateProviders created by this factory are to be used in environments 
+ *      RateProviders created by this factory are to be used in environments
  *      where the Chainlink registry is not available.
  */
 
 contract ChainlinkRateProviderFactory {
     // Mapping of rate providers created by this factory.
-    mapping (address => bool) private _factoryCreatedRateProviders;
+    mapping(address => bool) private _factoryCreatedRateProviders;
 
     event ChainlinkRateProviderCreated(address indexed rateProvider);
 
@@ -41,7 +41,7 @@ contract ChainlinkRateProviderFactory {
         _factoryCreatedRateProviders[address(rateProvider)] = true;
 
         emit ChainlinkRateProviderCreated(address(rateProvider));
-        
+
         return rateProvider;
     }
 
