@@ -14,8 +14,9 @@
 
 pragma solidity ^0.8.0;
 
-import "./interfaces/IRateProvider.sol";
 import "@openzeppelin/contracts/interfaces/IERC4626.sol";
+
+import "./interfaces/IRateProvider.sol";
 
 /**
  * @title ERC4626 Rate Provider
@@ -24,12 +25,13 @@ import "@openzeppelin/contracts/interfaces/IERC4626.sol";
  */
 contract ERC4626RateProvider is IRateProvider {
     IERC4626 public immutable erc4626;
-    uint256 public immutable base;
+    uint256 public immutable fixedPointOne;
 
     constructor(IERC4626 _erc4626) {
         erc4626 = _erc4626;
+        uint256 underlyingDecimals = IERC4626(_erc4626.asset()).decimals();
         // Balancer does not support tokens with more than 18 decimals so this will never underflow
-        base = 10**(18 + _erc4626.decimals() - IERC4626(address(_erc4626.asset())).decimals());
+        fixedPointOne = 10**(18 + _erc4626.decimals() - underlyingDecimals);
     }
 
     /**
@@ -37,6 +39,6 @@ contract ERC4626RateProvider is IRateProvider {
      * shares of an ERC4626 to the underlying asset
      */
     function getRate() external view override returns (uint256) {
-        return erc4626.convertToAssets(base);
+        return erc4626.convertToAssets(fixedPointOne);
     }
 }
