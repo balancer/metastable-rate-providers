@@ -19,7 +19,7 @@ import "./ERC4626RateProviderBase.sol";
 import "./interfaces/IRateProvider.sol";
 import "@openzeppelin/contracts/interfaces/IERC4626.sol";
 
-contract AaaveMarketRateTransformer is ERC4626RateProviderBase {
+contract AaveMarketRateTransformer is ERC4626RateProviderBase {
     address public vaultAssetFeed;
 
     constructor(address _vaultAssetFeed, address _erc4626Vault) 

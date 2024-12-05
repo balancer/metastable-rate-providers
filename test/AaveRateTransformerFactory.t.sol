@@ -2,13 +2,13 @@ pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
 
-import {AaaveMarketRateTransformer} from "../contracts/AaaveMarketRateTransformer.sol";
-import {AaaveMarketRateTransformerFactory} from "../contracts/AaaveMarketRateTransformerFactory.sol";
+import {AaveMarketRateTransformer} from "../contracts/AaveMarketRateTransformer.sol";
+import {AaveMarketRateTransformerFactory} from "../contracts/AaveMarketRateTransformerFactory.sol";
 interface IBaseFactory {
     function isRateProviderFromFactory(address rateProvider) external view returns (bool);
 }
 
-contract AaaveMarketRateTransformerFactoryTest is Test {
+contract AaveMarketRateTransformerFactoryTest is Test {
 
     function setUp() public {
         string memory RPC_URL = vm.envString("RPC_URL");
@@ -22,10 +22,10 @@ contract AaaveMarketRateTransformerFactoryTest is Test {
         address erc4626Vault = 0x775F661b0bD1739349b9A2A3EF60be277c5d2D29;
 
         // deploy the wrapper factory
-        AaaveMarketRateTransformerFactory factory = new AaaveMarketRateTransformerFactory();
+        AaveMarketRateTransformerFactory factory = new AaveMarketRateTransformerFactory();
 
         // deploy the rate provider wrapper
-        AaaveMarketRateTransformer rateProvider = factory.create(rateSource, erc4626Vault);
+        AaveMarketRateTransformer rateProvider = factory.create(rateSource, erc4626Vault);
 
 
         uint256 rate = rateProvider.getRate();

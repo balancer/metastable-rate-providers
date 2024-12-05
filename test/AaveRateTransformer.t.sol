@@ -11,7 +11,7 @@ interface IERC4626RateProvider {
     function erc4626() external view returns (address);
 }
 
-import {AaaveMarketRateTransformer} from "../contracts/AaaveMarketRateTransformer.sol";
+import {AaveMarketRateTransformer} from "../contracts/AaveMarketRateTransformer.sol";
 contract AaveMarketRateTransformerTest is Test {
 
     function setUp() public {
@@ -29,7 +29,7 @@ contract AaveMarketRateTransformerTest is Test {
 
 
         // deploy the rate provider wrapper
-        AaaveMarketRateTransformer rateProvider = new AaaveMarketRateTransformer(rateSource, erc4626Vault);
+        AaveMarketRateTransformer rateProvider = new AaveMarketRateTransformer(rateSource, erc4626Vault);
         // get the rate
         uint256 rate = rateProvider.getRate();
         // check the rate is not zero

@@ -15,7 +15,7 @@
 pragma solidity ^0.8.0;
 
 import "./BaseRateProviderFactory.sol";
-import "./AaaveMarketRateTransformer.sol";
+import "./AaveMarketRateTransformer.sol";
 
 /**
  * @title  Aave Market Rate Transformer Factory
@@ -25,14 +25,14 @@ import "./AaaveMarketRateTransformer.sol";
  */
 
 
-contract AaaveMarketRateTransformerFactory is BaseRateProviderFactory {
+contract AaveMarketRateTransformerFactory is BaseRateProviderFactory {
     /**
      * @notice Deploys a new AaveMarketRateTransformer contract using a price feed.
      * @param _vaultAssetFeed - The Aave price feed contract.
      * @param _erc4626Vault - The ERC4626 vault contract.
      */
-    function create(address _vaultAssetFeed, address _erc4626Vault) external returns (AaaveMarketRateTransformer) {
-        AaaveMarketRateTransformer rateProvider = new AaaveMarketRateTransformer(_vaultAssetFeed, _erc4626Vault);
+    function create(address _vaultAssetFeed, address _erc4626Vault) external returns (AaveMarketRateTransformer) {
+        AaveMarketRateTransformer rateProvider = new AaveMarketRateTransformer(_vaultAssetFeed, _erc4626Vault);
         _onCreate(address(rateProvider));
         return rateProvider;
     }
