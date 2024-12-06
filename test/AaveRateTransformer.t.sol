@@ -2,6 +2,12 @@ pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
 
+import {AaveMarketRateTransformer} from "../contracts/AaveMarketRateTransformer.sol";
+import {ERC4626RateProvider} from "../contracts/ERC4626RateProvider.sol";
+
+import {IERC4626} from "@openzeppelin/contracts/interfaces/IERC4626.sol";
+
+
 interface IWrapper {
     function rateProvider() external view returns (address);
 }
@@ -11,12 +17,11 @@ interface IERC4626RateProvider {
     function erc4626() external view returns (address);
 }
 
-import {AaveMarketRateTransformer} from "../contracts/AaveMarketRateTransformer.sol";
 contract AaveMarketRateTransformerTest is Test {
 
     function setUp() public {
         string memory RPC_URL = vm.envString("RPC_URL");
-        vm.createSelectFork(RPC_URL);
+        vm.createSelectFork(RPC_URL, 21342806);
     }
 
     function testGetsRate() public {
@@ -24,9 +29,10 @@ contract AaveMarketRateTransformerTest is Test {
         address rateSource = 0x72D07D7DcA67b8A406aD1Ec34ce969c90bFEE768;
         address erc4626Vault = 0x775F661b0bD1739349b9A2A3EF60be277c5d2D29;
 
-        uint256 wstEthRate = 1186768427816612869; // was somewhere around 21330267 block
-        uint256 vaultRate = 1000804101867303003; // was somewhere around 21330267 block
+        ERC4626RateProvider erc4626rateProvider = new ERC4626RateProvider(IERC4626(erc4626Vault));
 
+        uint256 wstEthRate = IERC4626RateProvider(rateSource).getRate(); 
+        uint256 vaultRate = erc4626rateProvider.getRate();
 
         // deploy the rate provider wrapper
         AaveMarketRateTransformer rateProvider = new AaveMarketRateTransformer(rateSource, erc4626Vault);
