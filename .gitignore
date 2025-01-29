@@ -26,3 +26,11 @@ dist/
 
 # typechain artifacts
 typechain/
+
+# forge
+broadcast/
+cache_forge/
+out/
+lib/
+script/
+foundry.toml
